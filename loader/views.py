@@ -36,7 +36,7 @@ def logout_view(request):
 @login_required(login_url='/login/')
 def loader_page(request):
     """Main loader directory page"""
-    return render(request, 'loader/loader_list.html', {'user': request.user})
+    return render(request, 'loader/loader_list.html')
 
 
 class LoaderViewSet(viewsets.ModelViewSet):

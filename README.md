@@ -1,151 +1,120 @@
-# Django Loader API
+# Django Loader Directory - Справочник погрузчиков
 
-A Django REST Framework application for managing loaders/forklifts with PostgreSQL storage.
+Веб-приложение для учёта погрузчиков и их простоев.
 
-## Features
+## Демо-доступ
 
-- Store loader information (brand, number, capacity)
-- List all loaders
-- Retrieve, update, and delete loaders
-- Capacity with 3 decimal places precision
-- Django Admin integration
+```
+Username: admin
+Password: admin
+```
 
-## Setup
+## Возможности
 
-### Prerequisites
+- ✅ Справочник погрузчиков (марка, номер, грузоподъёмность)
+- ✅ Учёт простоев (начало, окончание, причина)
+- ✅ Поиск по номеру погрузчика
+- ✅ Фильтрация по статусу "Активен"
+- ✅ Тёмная/светлая тема (авто-определение системной)
+- ✅ Адаптивный дизайн
+- ✅ REST API
 
-- Python 3.8+
-- PostgreSQL 12+
+## Деплой на Render
 
-### Installation
+### Вариант 1: Автоматически (рекомендуется)
 
-1. **Create a virtual environment:**
+1. Создайте новый репозиторий на GitHub и запушьте код
+2. Зарегистрируйтесь на [render.com](https://render.com)
+3. Нажмите "New +" → "Blueprint"
+4. Подключите репозиторий GitHub
+5. Render автоматически развернёт приложение из `render.yaml`
+
+### Вариант 2: Вручную
+
+1. Создайте **Web Service** на Render
+2. Подключите репозиторий
+3. Настройки:
+   - **Build Command:** `pip install -r requirements.txt && python manage.py collectstatic --noinput`
+   - **Start Command:** `gunicorn config.wsgi:application`
+4. Добавьте переменные окружения:
+   ```
+   SECRET_KEY=<ваш-секретный-ключ>
+   DEBUG=False
+   ALLOWED_HOSTS=*
+   ```
+5. Создайте **PostgreSQL** базу данных (Render → Databases)
+6. Добавьте переменные окружения из базы данных:
+   ```
+   DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+   ```
+7. Примените миграции:
    ```bash
-   python -m venv venv
-   venv\Scripts\activate
+   render exec python manage.py migrate
    ```
 
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Локальная разработка
 
-3. **Configure PostgreSQL:**
-   
-   Create a PostgreSQL database:
-   ```bash
-   psql -U postgres
-   CREATE DATABASE bright_solutions;
-   \q
-   ```
+```bash
+# Установка зависимостей
+pip install -r requirements.txt
 
-4. **Update environment variables:**
-   
-   Edit `.env` file with your database credentials:
-   ```
-   DB_NAME=bright_solutions
-   DB_USER=your_username
-   DB_PASSWORD=your_password
-   ```
+# Создание .env файла
+cp .env.example .env
 
-5. **Run migrations:**
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+# Запуск PostgreSQL (локально)
+# Создайте базу данных: bright_solutions
 
-6. **Create superuser (optional):**
-   ```bash
-   python manage.py createsuperuser
-   ```
+# Миграции
+python manage.py migrate
 
-7. **Run the development server:**
-   ```bash
-   python manage.py runserver
-   ```
+# Запуск сервера
+python manage.py runserver
+```
 
 ## API Endpoints
 
-### Create a Loader
-```
-POST /api/loaders/
-Content-Type: application/json
+- `GET/POST /api/loaders/` - список/создание погрузчиков
+- `GET/PUT/PATCH/DELETE /api/loaders/<id>/` - операции с погрузчиком
+- `GET/POST /api/downtimes/` - список/создание простоев
+- `GET/PUT/PATCH/DELETE /api/downtimes/<id>/` - операции с простоем
 
-{
-  "brand": "Toyota",
-  "number": "LT-001",
-  "capacity": 2.500
-}
-```
+## Технологии
 
-### List All Loaders
-```
-GET /api/loaders/
-```
+- **Backend:** Django 4.2, Django REST Framework
+- **Database:** PostgreSQL
+- **Frontend:** HTML, CSS, Vanilla JavaScript
+- **Deployment:** Render (Gunicorn + WhiteNoise)
 
-### Get Loader Details
-```
-GET /api/loaders/<id>/
-```
-
-### Update Loader
-```
-PUT /api/loaders/<id>/
-PATCH /api/loaders/<id>/
-```
-
-### Delete Loader
-```
-DELETE /api/loaders/<id>/
-```
-
-## Example Usage
-
-### Using cURL to create a loader:
-```bash
-curl -X POST http://localhost:8000/api/loaders/ \
-  -H "Content-Type: application/json" \
-  -d '{"brand": "Toyota", "number": "LT-001", "capacity": 2.500}'
-```
-
-### Using Python requests:
-```python
-import requests
-
-url = 'http://localhost:8000/api/loaders/'
-data = {'brand': 'Toyota', 'number': 'LT-001', 'capacity': 2.500}
-
-response = requests.post(url, json=data)
-print(response.json())
-```
-
-## Admin Panel
-
-Access the Django admin at `http://localhost:8000/admin/` to manage loaders through the UI.
-
-## Project Structure
+## Структура проекта
 
 ```
 Project/
-├── config/              # Django project settings
+├── config/              # Настройки Django
 │   ├── settings.py
 │   ├── urls.py
-│   └── ...
-├── loader/              # Loader app
-│   ├── models.py
-│   ├── views.py
-│   ├── serializers.py
-│   ├── urls.py
-│   └── admin.py
-├── .env                 # Environment variables
+│   └── wsgi.py
+├── loader/              # Приложение погрузчиков
+│   ├── models.py        # Модели Loader, Downtime
+│   ├── views.py         # Views и API
+│   ├── serializers.py   # DRF serializers
+│   ├── urls.py          # URL маршруты
+│   ├── api_urls.py      # API routes
+│   ├── admin.py         # Django admin
+│   ├── migrations/      # Миграции БД
+│   ├── static/          # Статические файлы
+│   │   └── loader/
+│   │       ├── styles.css
+│   │       └── app.js
+│   └── templates/       # HTML шаблоны
+│       └── loader/
+│           ├── loader_list.html
+│           └── login.html
 ├── manage.py
-└── requirements.txt
+├── requirements.txt
+├── render.yaml          # Конфигурация Render
+└── .env                 # Переменные окружения
 ```
 
-## Model Fields
+## Лицензия
 
-| Field | Type | Description |
-|-------|------|-------------|
-| brand | CharField(255) | Марка погрузчика (Loader brand) |
-| number | CharField(100) | Номер погрузчика (Loader number) |
-| capacity | DecimalField(10, 3) | Грузоподъемность (Load capacity, max 3 decimal places) |
+MIT

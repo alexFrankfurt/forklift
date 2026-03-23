@@ -1,402 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Справочник погрузчиков</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        /* Header */
-        .header {
-            background-color: #cc0000;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-
-        .header-logo {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-name {
-            color: white;
-            font-size: 14px;
-        }
-
-        .profile-btn {
-            background-color: white;
-            color: #333;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .profile-btn:hover {
-            background-color: #f0f0f0;
-        }
-
-        .logout-btn {
-            background-color: transparent;
-            color: white;
-            border: 1px solid white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .logout-btn:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        /* Main container */
-        .main-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 180px;
-            background-color: #e8e8e8;
-            padding: 20px 10px;
-            overflow-y: auto;
-        }
-
-        .sidebar-item {
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #333;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .sidebar-item:hover {
-            background-color: #d0d0d0;
-        }
-
-        .sidebar-item.active {
-            color: #cc0000;
-            font-weight: 500;
-        }
-
-        /* Content area */
-        .content {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
-        }
-
-        /* Main panel */
-        .main-panel {
-            flex: 1;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Side panel */
-        .side-panel {
-            width: 400px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Title */
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        /* Search bar */
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .search-bar label {
-            font-size: 14px;
-            color: #333;
-        }
-
-        .search-bar input {
-            padding: 6px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            width: 150px;
-        }
-
-        .search-btn {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .search-btn:hover {
-            background-color: #aa0000;
-        }
-
-        .reset-filter {
-            color: #cc0000;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 13px;
-            margin-left: 10px;
-        }
-
-        .reset-filter:hover {
-            text-decoration: none;
-        }
-
-        /* Add button */
-        .add-btn {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 8px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .add-btn:hover {
-            background-color: #aa0000;
-        }
-
-        /* Tables */
-        .table-container {
-            flex: 1;
-            overflow: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        th {
-            background-color: #f8f8f8;
-            padding: 10px 8px;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #ddd;
-            position: sticky;
-            top: 0;
-        }
-
-        td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-
-        tr:hover {
-            background-color: #f8f8f8;
-        }
-
-        .actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            font-size: 14px;
-            opacity: 0.6;
-        }
-
-        .action-btn:hover {
-            opacity: 1;
-        }
-
-        .edit-btn {
-            color: #666;
-        }
-
-        .delete-btn {
-            color: #cc0000;
-        }
-
-        .checkbox {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        /* Side panel title */
-        .side-panel-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .side-panel-title span {
-            font-weight: 400;
-            color: #666;
-            margin-left: 10px;
-        }
-
-        .side-add-btn {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .side-add-btn:hover {
-            background-color: #aa0000;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 400px;
-            max-width: 90%;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .cancel-btn {
-            background-color: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .save-btn {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .selected-row {
-            background-color: #fff3cd !important;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'loader/styles.css' %}?v=2">
 </head>
 <body>
     <!-- Header -->
@@ -404,6 +13,7 @@
         <div class="header-logo">АИС ОГПА</div>
         <div class="header-right">
             <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌓</button>
             <button class="logout-btn" onclick="logout()">Выход</button>
         </div>
     </div>
@@ -411,7 +21,7 @@
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-item">Пользователи</div>
             <div class="sidebar-item">Уведомления и напоминания</div>
             <div class="sidebar-item">Настройки АИС ОГПА</div>
@@ -420,10 +30,18 @@
             <div class="sidebar-item">Справочники</div>
         </div>
 
+        <!-- Sidebar overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+
+        <!-- Mobile sidebar toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()">
+            ☰
+        </button>
+
         <!-- Content -->
         <div class="content">
             <!-- Main Panel - Loaders -->
-            <div class="main-panel">
+            <div class="main-panel" id="mainPanel">
                 <h1 class="title">Справочник погрузчиков</h1>
                 
                 <div class="search-bar">
@@ -459,8 +77,11 @@
                 </div>
             </div>
 
+            <!-- Resizer -->
+            <div class="resizer" id="resizer"></div>
+
             <!-- Side Panel - Downtimes -->
-            <div class="side-panel">
+            <div class="side-panel" id="sidePanel">
                 <h2 class="side-panel-title">
                     Простои по погрузчику
                     <span id="selectedLoaderNumber"></span>
@@ -523,378 +144,36 @@
 
     <!-- Downtime Modal -->
     <div class="modal" id="downtimeModal">
-        <div class="modal-content">
-            <h3 class="modal-title" id="downtimeModalTitle">Добавить простой</h3>
+        <div class="modal-content downtime-modal">
+            <h3 class="modal-title">Проблемы с погрузчиком ? опишите</h3>
             <form id="downtimeForm">
                 <input type="hidden" id="downtimeId">
                 <input type="hidden" id="downtimeLoaderId">
-                <div class="form-group">
-                    <label>Начало *</label>
-                    <input type="datetime-local" id="downtimeStart" required>
+
+                <div class="datetime-row">
+                    <div class="datetime-group">
+                        <label>начало</label>
+                        <input type="datetime-local" id="downtimeStart" required>
+                    </div>
+                    <div class="datetime-group">
+                        <label>окончание</label>
+                        <input type="datetime-local" id="downtimeEnd" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Окончание *</label>
-                    <input type="datetime-local" id="downtimeEnd" required>
+                
+                <div class="form-group textarea-group">
+                    <label>описание инцидента</label>
+                    <textarea id="downtimeReason" required placeholder="Введите описание проблемы..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Время простоя *</label>
-                    <input type="text" id="downtimeDuration" placeholder="Например: 1ч 35 мин" required>
-                </div>
-                <div class="form-group">
-                    <label>Причина *</label>
-                    <textarea id="downtimeReason" required></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="cancel-btn" onclick="closeDowntimeModal()">Отмена</button>
+
+                <div class="form-actions modal-actions">
                     <button type="submit" class="save-btn">Сохранить</button>
+                    <button type="button" class="cancel-btn btn-exit" onclick="closeDowntimeModal()">Выход</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script>
-        const API_BASE = '/api';
-        let selectedLoaderId = null;
-
-        // Get CSRF token
-        function getCsrfToken() {
-            const name = 'csrftoken';
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        // Load loaders on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadLoaders();
-        });
-
-        // Load all loaders
-        async function loadLoaders(number = '') {
-            try {
-                const url = number ? `${API_BASE}/loaders/?number=${encodeURIComponent(number)}` : `${API_BASE}/loaders/`;
-                const response = await fetch(url);
-                const loaders = await response.json();
-                renderLoaders(loaders);
-            } catch (error) {
-                console.error('Error loading loaders:', error);
-            }
-        }
-
-        // Render loaders table
-        function renderLoaders(loaders) {
-            const tbody = document.getElementById('loadersTable');
-            tbody.innerHTML = loaders.map(loader => `
-                <tr onclick="selectLoader(${loader.id}, '${escapeHtml(loader.number)}')" style="cursor: pointer;">
-                    <td>${loader.code || ''}</td>
-                    <td>${escapeHtml(loader.brand)}</td>
-                    <td>${escapeHtml(loader.number)}</td>
-                    <td>${parseFloat(loader.capacity).toFixed(3)}</td>
-                    <td><input type="checkbox" class="checkbox" ${loader.is_active ? 'checked' : ''} onclick="event.stopPropagation(); toggleActive(${loader.id}, this.checked)"></td>
-                    <td>${formatDateTime(loader.updated_at)}</td>
-                    <td>${loader.created_by_name || ''}</td>
-                    <td class="actions">
-                        <button class="action-btn edit-btn" onclick="event.stopPropagation(); editLoader(${loader.id})">✏️</button>
-                        <button class="action-btn delete-btn" onclick="event.stopPropagation(); deleteLoader(${loader.id})">❌</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Select loader and load downtimes
-        async function selectLoader(loaderId, loaderNumber) {
-            selectedLoaderId = loaderId;
-            document.getElementById('selectedLoaderNumber').textContent = loaderNumber;
-            
-            // Highlight selected row
-            document.querySelectorAll('#loadersTable tr').forEach(row => {
-                row.classList.remove('selected-row');
-            });
-            event.currentTarget.classList.add('selected-row');
-
-            await loadDowntimes(loaderId);
-        }
-
-        // Load downtimes for selected loader
-        async function loadDowntimes(loaderId) {
-            try {
-                const response = await fetch(`${API_BASE}/downtimes/?loader_id=${loaderId}`);
-                const downtimes = await response.json();
-                renderDowntimes(downtimes);
-            } catch (error) {
-                console.error('Error loading downtimes:', error);
-            }
-        }
-
-        // Render downtimes table
-        function renderDowntimes(downtimes) {
-            const tbody = document.getElementById('downtimesTable');
-            tbody.innerHTML = downtimes.map(downtime => `
-                <tr>
-                    <td>${downtime.id}</td>
-                    <td>${formatDateTime(downtime.start_time)}</td>
-                    <td>${formatDateTime(downtime.end_time)}</td>
-                    <td>${downtime.duration}</td>
-                    <td>${escapeHtml(downtime.reason)}</td>
-                    <td class="actions">
-                        <button class="action-btn edit-btn" onclick="editDowntime(${downtime.id})">✏️</button>
-                        <button class="action-btn delete-btn" onclick="deleteDowntime(${downtime.id})">❌</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Search loader
-        function searchLoader() {
-            const number = document.getElementById('searchNumber').value.trim();
-            loadLoaders(number);
-        }
-
-        // Reset filter
-        function resetFilter() {
-            document.getElementById('searchNumber').value = '';
-            loadLoaders();
-        }
-
-        // Toggle active status
-        async function toggleActive(loaderId, isActive) {
-            try {
-                await fetch(`${API_BASE}/loaders/${loaderId}/`, {
-                    method: 'PATCH',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCsrfToken()
-                    },
-                    body: JSON.stringify({ is_active: isActive })
-                });
-            } catch (error) {
-                console.error('Error updating loader:', error);
-            }
-        }
-
-        // Open loader modal
-        function openLoaderModal(loaderId = null) {
-            const modal = document.getElementById('loaderModal');
-            const title = document.getElementById('loaderModalTitle');
-            const form = document.getElementById('loaderForm');
-            
-            form.reset();
-            
-            if (loaderId) {
-                title.textContent = 'Редактировать погрузчик';
-                fetch(`${API_BASE}/loaders/${loaderId}/`)
-                    .then(r => r.json())
-                    .then(loader => {
-                        document.getElementById('loaderId').value = loader.id;
-                        document.getElementById('loaderBrand').value = loader.brand;
-                        document.getElementById('loaderNumber').value = loader.number;
-                        document.getElementById('loaderCapacity').value = loader.capacity;
-                        document.getElementById('loaderActive').value = loader.is_active.toString();
-                    });
-            } else {
-                title.textContent = 'Добавить погрузчик';
-                document.getElementById('loaderId').value = '';
-            }
-            
-            modal.classList.add('active');
-        }
-
-        // Close loader modal
-        function closeLoaderModal() {
-            document.getElementById('loaderModal').classList.remove('active');
-        }
-
-        // Edit loader
-        function editLoader(loaderId) {
-            openLoaderModal(loaderId);
-        }
-
-        // Delete loader
-        async function deleteLoader(loaderId) {
-            if (!confirm('Вы уверены, что хотите удалить этот погрузчик?')) return;
-            
-            try {
-                await fetch(`${API_BASE}/loaders/${loaderId}/`, { 
-                    method: 'DELETE',
-                    headers: { 'X-CSRFToken': getCsrfToken() }
-                });
-                loadLoaders();
-                if (selectedLoaderId === loaderId) {
-                    selectedLoaderId = null;
-                    document.getElementById('selectedLoaderNumber').textContent = '';
-                    document.getElementById('downtimesTable').innerHTML = '';
-                }
-            } catch (error) {
-                console.error('Error deleting loader:', error);
-            }
-        }
-
-        // Open downtime modal
-        function openDowntimeModal(downtimeId = null) {
-            if (!selectedLoaderId) {
-                alert('Сначала выберите погрузчик');
-                return;
-            }
-
-            const modal = document.getElementById('downtimeModal');
-            const title = document.getElementById('downtimeModalTitle');
-            const form = document.getElementById('downtimeForm');
-            
-            form.reset();
-            document.getElementById('downtimeLoaderId').value = selectedLoaderId;
-            
-            if (downtimeId) {
-                title.textContent = 'Редактировать простой';
-                fetch(`${API_BASE}/downtimes/${downtimeId}/`)
-                    .then(r => r.json())
-                    .then(downtime => {
-                        document.getElementById('downtimeId').value = downtime.id;
-                        document.getElementById('downtimeStart').value = formatDateTimeLocal(downtime.start_time);
-                        document.getElementById('downtimeEnd').value = formatDateTimeLocal(downtime.end_time);
-                        document.getElementById('downtimeDuration').value = downtime.duration;
-                        document.getElementById('downtimeReason').value = downtime.reason;
-                    });
-            } else {
-                title.textContent = 'Добавить простой';
-                document.getElementById('downtimeId').value = '';
-            }
-            
-            modal.classList.add('active');
-        }
-
-        // Close downtime modal
-        function closeDowntimeModal() {
-            document.getElementById('downtimeModal').classList.remove('active');
-        }
-
-        // Edit downtime
-        function editDowntime(downtimeId) {
-            openDowntimeModal(downtimeId);
-        }
-
-        // Delete downtime
-        async function deleteDowntime(downtimeId) {
-            if (!confirm('Вы уверены, что хотите удалить этот простой?')) return;
-            
-            try {
-                await fetch(`${API_BASE}/downtimes/${downtimeId}/`, { 
-                    method: 'DELETE',
-                    headers: { 'X-CSRFToken': getCsrfToken() }
-                });
-                loadDowntimes(selectedLoaderId);
-            } catch (error) {
-                console.error('Error deleting downtime:', error);
-            }
-        }
-
-        // Format datetime
-        function formatDateTime(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            return date.toLocaleString('ru-RU', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        // Format datetime for input
-        function formatDateTimeLocal(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            return date.toISOString().slice(0, 16);
-        }
-
-        // Escape HTML
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Logout
-        function logout() {
-            window.location.href = '/logout/';
-        }
-
-        // Handle loader form submit
-        document.getElementById('loaderForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const loaderId = document.getElementById('loaderId').value;
-            const data = {
-                brand: document.getElementById('loaderBrand').value,
-                number: document.getElementById('loaderNumber').value,
-                capacity: parseFloat(document.getElementById('loaderCapacity').value),
-                is_active: document.getElementById('loaderActive').value === 'true'
-            };
-
-            try {
-                const url = loaderId ? `${API_BASE}/loaders/${loaderId}/` : `${API_BASE}/loaders/`;
-                const method = loaderId ? 'PUT' : 'POST';
-                
-                await fetch(url, {
-                    method,
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCsrfToken()
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                closeLoaderModal();
-                loadLoaders();
-            } catch (error) {
-                console.error('Error saving loader:', error);
-                alert('Ошибка при сохранении погрузчика');
-            }
-        });
-
-        // Handle downtime form submit
-        document.getElementById('downtimeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const downtimeId = document.getElementById('downtimeId').value;
-            const data = {
-                loader: parseInt(document.getElementById('downtimeLoaderId').value),
-                start_time: document.getElementById('downtimeStart').value,
-                end_time: document.getElementById('downtimeEnd').value,
-                duration: document.getElementById('downtimeDuration').value,
-                reason: document.getElementById('downtimeReason').value
-            };
-
-            try {
-                const url = downtimeId ? `${API_BASE}/downtimes/${downtimeId}/` : `${API_BASE}/downtimes/`;
-                const method = downtimeId ? 'PUT' : 'POST';
-                
-                await fetch(url, {
-                    method,
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCsrfToken()
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                closeDowntimeModal();
-                loadDowntimes(selectedLoaderId);
-            } catch (error) {
-                console.error('Error saving downtime:', error);
-                alert('Ошибка при сохранении простоя');
-            }
-        });
-    </script>
+    <script src="{% static 'loader/app.js' %}"></script>
 </body>
 </html>

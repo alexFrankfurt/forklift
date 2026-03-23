@@ -1,0 +1,47 @@
+# Render deployment configuration
+
+services:
+  # Web Service
+  - type: web
+    name: loader-directory
+    env: python
+    region: frankfurt
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: DB_NAME
+        fromDatabase:
+          name: loader-db
+          property: dbname
+      - key: DB_USER
+        fromDatabase:
+          name: loader-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: loader-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: loader-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: loader-db
+          property: port
+
+databases:
+  - name: loader-db
+    databaseName: loader_directory
+    user: loader_user
+    plan: free

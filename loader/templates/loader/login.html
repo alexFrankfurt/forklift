@@ -1,129 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход в систему</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #f5f5f5;
-        }
-
-        /* Header */
-        .header {
-            background-color: #cc0000;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            color: white;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        /* Login container */
-        .login-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .login-box {
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #cc0000;
-        }
-
-        .error-message {
-            background-color: #ffe6e6;
-            color: #cc0000;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .login-btn {
-            width: 100%;
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-
-        .login-btn:hover {
-            background-color: #aa0000;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 13px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'loader/styles.css' %}">
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="logo">АИС ОГПА</div>
+        <div class="header-logo">АИС ОГПА</div>
     </div>
 
     <!-- Login Container -->
@@ -154,5 +41,25 @@
     <div class="footer">
         © 2026 АИС ОГПА. Все права защищены.
     </div>
+
+    <script>
+        // Theme initialization for login page
+        const THEMES = {
+            SYSTEM: 'system',
+            LIGHT: 'light',
+            DARK: 'dark'
+        };
+
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || THEMES.SYSTEM;
+            
+            if (savedTheme === THEMES.SYSTEM) {
+                const systemDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', systemDarkTheme ? 'dark' : 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+    </script>
 </body>
 </html>
