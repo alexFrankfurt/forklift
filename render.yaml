@@ -19,26 +19,10 @@ services:
         value: false
       - key: ALLOWED_HOSTS
         value: "*"
-      - key: DB_NAME
+      - key: DATABASE_URL
         fromDatabase:
           name: loader-db
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: loader-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: loader-db
-          property: password
-      - key: DB_HOST
-        fromDatabase:
-          name: loader-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: loader-db
-          property: port
+          property: connectionString
 
 databases:
   - name: loader-db
