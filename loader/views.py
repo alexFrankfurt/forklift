@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -45,9 +46,12 @@ class LoaderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Loader.objects.all()
-        number = self.request.query_params.get('number', None)
-        if number:
-            queryset = queryset.filter(number__icontains=number)
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                models.Q(number__icontains=search) |
+                models.Q(brand__icontains=search)
+            )
         return queryset
 
     def perform_create(self, serializer):

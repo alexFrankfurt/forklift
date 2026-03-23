@@ -207,9 +207,9 @@ function checkMobileView() {
 window.addEventListener('resize', checkMobileView);
 
 // Load all loaders
-async function loadLoaders(number = '') {
+async function loadLoaders(search = '') {
     try {
-        const url = number ? `${API_BASE}/loaders/?number=${encodeURIComponent(number)}` : `${API_BASE}/loaders/`;
+        const url = search ? `${API_BASE}/loaders/?search=${encodeURIComponent(search)}` : `${API_BASE}/loaders/`;
         const response = await fetch(url);
         const loaders = await response.json();
         renderLoaders(loaders);
@@ -284,6 +284,7 @@ function renderDowntimes(downtimes) {
 // Search loader
 function searchLoader() {
     const number = document.getElementById('searchNumber').value.trim();
+    console.log('Searching for:', number);
     loadLoaders(number);
 }
 
@@ -463,6 +464,16 @@ function logout() {
 
 // Handle loader form submit
 document.addEventListener('DOMContentLoaded', () => {
+    // Add Enter key handler for search input
+    const searchInput = document.getElementById('searchNumber');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchLoader();
+            }
+        });
+    }
+
     const loaderForm = document.getElementById('loaderForm');
     if (loaderForm) {
         loaderForm.addEventListener('submit', async (e) => {

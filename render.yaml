@@ -9,7 +9,7 @@ services:
     plan: free
     branch: main
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "gunicorn config.wsgi:application"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT config.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
