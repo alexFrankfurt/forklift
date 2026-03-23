@@ -22,7 +22,7 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: loader-db
-          property: dbname
+          property: database
       - key: DB_USER
         fromDatabase:
           name: loader-db

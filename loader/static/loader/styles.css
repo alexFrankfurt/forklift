@@ -85,18 +85,39 @@ body {
     justify-content: space-between;
     padding: 0 20px;
     transition: background-color 0.3s ease;
+    position: relative;
 }
 
 .header-logo {
     color: var(--text-white);
     font-size: 18px;
     font-weight: 600;
+    flex: 1;
 }
 
 .header-right {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+/* Mobile menu toggle - integrated into header */
+.mobile-menu-toggle {
+    display: none;
+    background-color: var(--btn-outline);
+    color: var(--text-white);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    margin-right: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .user-name {
@@ -147,23 +168,6 @@ body {
 
 .logout-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Mobile menu toggle */
-.mobile-menu-toggle {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1000;
-    background-color: var(--btn-primary);
-    color: var(--text-white);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
 }
 
 /* Main container */
@@ -745,7 +749,6 @@ tr:hover {
 @media (max-width: 768px) {
     .header {
         padding: 0 15px;
-        justify-content: center;
     }
 
     .header-right {
@@ -766,7 +769,7 @@ tr:hover {
         font-size: 12px;
     }
 
-    /* Mobile menu toggle */
+    /* Mobile menu toggle - shown in header */
     .mobile-menu-toggle {
         display: block;
     }

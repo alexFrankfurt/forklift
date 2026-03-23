@@ -5,11 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Справочник погрузчиков</title>
-    <link rel="stylesheet" href="{% static 'loader/styles.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'loader/styles.css' %}?v=3">
 </head>
 <body>
     <!-- Header -->
     <div class="header">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()">
+            ☰
+        </button>
         <div class="header-logo">АИС ОГПА</div>
         <div class="header-right">
             <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
@@ -32,11 +35,6 @@
 
         <!-- Sidebar overlay for mobile -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
-
-        <!-- Mobile sidebar toggle -->
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileMenu()">
-            ☰
-        </button>
 
         <!-- Content -->
         <div class="content">
